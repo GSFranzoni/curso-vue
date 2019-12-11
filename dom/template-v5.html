@@ -1,0 +1,24 @@
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<div id="app">
+    <p v-once>{{ titulo }}</p>
+    <p>{{ saudacao() }}</p>
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            titulo: 'Usando vueJS 2!',
+            link: 'https://google.com',
+            src: 'https://miro.medium.com/max/2000/1*XH9l-6x9SUlmGxPlZFaoIA.jpeg',
+            alt: 'vue-logo'
+        },
+        methods: {
+            saudacao: function() {
+                this.titulo = 'Bom dia!';
+                return this.titulo;
+            }
+        }
+    })
+</script>
