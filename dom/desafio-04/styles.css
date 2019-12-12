@@ -1,0 +1,27 @@
+#efeito {
+	width: 100px;
+	height: 100px;
+	border: 1px solid black;
+}
+
+.destaque {
+	background-color: red;
+	width: 200px !important;
+}
+
+.encolher {
+	background-color: gray;
+	width: 50px !important;
+}
+
+.vermelho {
+	background-color: red;
+}
+
+.metade {
+	width: 50%;
+}
+
+* {
+	transition: width .3s;
+}
