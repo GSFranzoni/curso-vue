@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app1">
+        {{ titulo1 }}
+    </div>
+    <div id="app2">
+        {{ titulo2 }}
+    </div>
+</body>
+<script>
+    new Vue({
+        el: '#app1',
+        data: {
+            titulo1: 'Teste 1'
+        }
+    });
+    new Vue({
+        el: '#app2',
+        data: {
+            titulo2: 'Teste 2'
+        }
+    });
+</script>
+</html>
