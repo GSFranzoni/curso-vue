@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div class="panel scores">
+            <div class='score score-player'>
+                <div class="score-title">Player</div>
+                <div class="score-life-bar">
+                    {{ playerLife }}%
+                    <div class="score-life-bar-filled"
+                        :style="{width: playerLife + '%', backgroundColor: getPlayerLifeBarColor}"></div>
+                </div>
+            </div>
+            <div class='score score-monster'>
+                <div class="score-title">Monster</div>
+                <div class="score-life-bar">
+                    {{ monsterLife }}%
+                    <div class="score-life-bar-filled"
+                        :style="{width: monsterLife + '%', backgroundColor: getMonsterLifeBarColor}"></div>
+                </div>
+            </div>
+        </div>
+        <div v-if="endGame" class="panel result">
+            <div v-if="playerLife>0" class="alert alert-success">
+                Você venceu!!!
+            </div>
+            <div v-else-if="monsterLife>0" class="alert alert-danger">
+                O monstro venceu!!!
+            </div>
+            <div v-else class="alert alert-warning">
+                Empatou
+            </div>
+        </div>
+        <div class="panel buttons">
+            <button v-if="!playing" @click="resetGame" class='btn btn-lg btn-primary'>Iniciar jogo</button>
+            <template v-else>
+                <button v-if="playing" @click="attack(maxHitPlayer, maxHitMonster)"
+                    class="btn btn-danger btn-lg mx-2">Atacar</button>
+                <button v-if="playing" @click="attack(maxSpecialHitPlayer, maxHitMonster)"
+                    class="btn btn-warning btn-lg mx-2">Ataque
+                    especial</button>
+                <button v-if="playing" @click="heal" class="btn btn-success btn-lg mx-2">Curar</button>
+                <button v-if="playing" @click="resetGame(); playing=false;" class="btn btn-lg mx-2">Desistir</button>
+            </template>
+        </div>
+        <div v-if="logs.length>0 && playing" class="panel logs">
+            <div v-for="log in logs.slice().reverse()">
+                <div class="alert alert-danger" v-if="log.round[0].color=='danger'"> {{ log.round[0].message }} </div>
+                <div class="alert alert-success" v-else> {{ log.round[0].message }} </div>
+                <div class="alert alert-danger" v-if="log.round[1].color=='danger'"> {{ log.round[1].message }} </div>
+                <div class="alert alert-success" v-else> {{ log.round[1].message }} </div>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
