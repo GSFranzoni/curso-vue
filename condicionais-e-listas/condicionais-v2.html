@@ -1,0 +1,31 @@
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+<style>
+    
+</style>
+
+<div id="app">
+    <p v-if="logado">Usuário logado: {{ nome }}</p>
+    <p v-else-if="anonimo">Navegando anonimo</p>
+    <p v-else>Nenhum usuário logado</p>
+    <button @click='logado=!logado'>{{ logado? 'Sair': 'Entrar' }}</button>
+    <input type="checkbox" v-model="anonimo">
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            nome: 'Guilherme',
+            logado: false,
+            anonimo: true
+        },
+        computed: {
+            
+        },
+        methods: {
+            
+        }
+    })
+</script>
