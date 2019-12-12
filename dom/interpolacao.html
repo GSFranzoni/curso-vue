@@ -1,0 +1,23 @@
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<div id="app">
+    <p>{{ contador*2 }}</p>
+    <p>{{ contador>10? 'Maior que 10': 'Menor ou igual a 10' }}</p>
+    <button v-on:click="somar">SOMAR</button>
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            contador: 0,
+            x: 0,
+            y: 0
+        },
+        methods: {
+            somar: function() {
+                this.contador+=1;
+            }
+        }
+    })
+</script>
