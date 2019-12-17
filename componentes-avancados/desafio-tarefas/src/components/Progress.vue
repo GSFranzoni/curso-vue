@@ -20,13 +20,15 @@ export default {
 
 <style>
 .progress-bar {
-  transition: width 0.5s;
+  transition: width 1.2s;
 }
 .progress {
   position: relative;
   height: 35px;
-  width: 70%;
-  background-color: rgba(0, 0, 0, 0.2);
+  width: 800px;
+  max-width: 90%;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid white;
   color: white;
 }
 strong {

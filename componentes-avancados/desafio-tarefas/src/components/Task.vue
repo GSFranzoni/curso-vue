@@ -30,16 +30,18 @@ export default {
 
 <style>
     .task {
+        padding: 10px;
         display: flex;
         justify-content: center;
         align-items: center;
         width: 300px;
-        height: 150px;
+        min-height: 150px;
+        max-width: 90%;
         position: relative;
         border-radius: 5px;
         color: white;
         border-left: 8px solid rgb(228, 31, 70);
-        background-color: rgb(228, 63, 96);
+        background-color: rgb(231, 95, 122);
     }
     .task-completed {
         border-left: 8px solid seagreen;
@@ -55,5 +57,14 @@ export default {
         padding: 3px 10px;
         box-sizing: border-box;
         border-radius: 50%;
+        transition: background-color .4s;
+    }
+
+    .task a:hover {
+        background-color: rgba(0, 0, 0, .6);
+    }
+
+    * {
+        transition: border, background-color 1s;
     }
 </style>

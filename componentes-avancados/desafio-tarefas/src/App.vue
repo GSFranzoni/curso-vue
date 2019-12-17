@@ -3,8 +3,11 @@
     <h1>Tarefas</h1>
     <app-progress :percent="percent"></app-progress>
     <app-form @newTask="newTask"></app-form>
-    <div class="tasks">
+    <div v-if="tasks.length" class="tasks">
       <app-task @removeTask="removeTask" v-for="task in tasks" :key="task.id" :task="task"></app-task>
+    </div>
+    <div v-else>
+      Sua vida está em dia...
     </div>
   </div>
 </template>
@@ -29,11 +32,13 @@ export default {
   methods: {
     newTask: function($task) {
       this.tasks.push($task);
+      localStorage.setItem('tasks', JSON.stringify(this.tasks));
     },
     removeTask($id) {
       this.tasks = this.tasks.filter(task => {
         return task.id != $id;
       });
+      localStorage.setItem('tasks', JSON.stringify(this.tasks));
     }
   },
   computed: {
@@ -42,13 +47,22 @@ export default {
       this.tasks.forEach((task) => {
         perc+=task.completed?1:0;
       });
+      localStorage.setItem('tasks', JSON.stringify(this.tasks));
       return this.tasks.length === 0? 0: perc/this.tasks.length*100;
     }
+  },
+  created: function() {
+    if(!JSON.parse(localStorage.getItem('tasks'))) {
+      localStorage.setItem('tasks', JSON.stringify(new Array()));
+    }
+    this.tasks = JSON.parse(localStorage.getItem('tasks'));
+    this.tasks = this.tasks == null? []: this.tasks;
   }
 };
 </script>
 
 <style>
+
 body {
   background: rgb(238, 174, 202);
   background: radial-gradient(
@@ -57,15 +71,19 @@ body {
     rgba(148, 187, 233, 1) 100%
   );
 }
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
+}
+
+h1 {
+  color: black;
+  padding: 15px;
 }
 
 #app > * {
