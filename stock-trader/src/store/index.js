@@ -45,6 +45,17 @@ export default new Vuex.Store({
             state.funds+=price;
             // eslint-disable-next-line
             console.log(state.funds)
+        },
+        setData: function(state, {orders, stocks, funds}) {
+            state.orders = orders;
+            state.stocks = stocks;
+            state.funds = funds;
+        },
+        generate: function() {
+            this.state.stocks = this.state.stocks.map(stock => {
+                stock.price = Math.max(0, Math.round(((Math.random()-0.5)*25)+stock.price));
+                return stock;
+            })
         }
     },
     actions: {
@@ -65,6 +76,21 @@ export default new Vuex.Store({
                 throw new Error('Você não tem essa quantidade de ações!');
             }
             commit('sellStock', {order, quantity});
+        },
+        loadData: function({ commit }) {
+            Vue.prototype.$http.get('stocks.json').then(
+                res => {
+                    const data = res.data;
+                    if(data)
+                        commit('setData', data);
+                }
+            )
+        },
+        sendData: function() {
+            Vue.prototype.$http.put('stocks.json', this.state);
+        },
+        generate: function({ commit }) {
+            commit('generate');
         }
     },
     modules: {
