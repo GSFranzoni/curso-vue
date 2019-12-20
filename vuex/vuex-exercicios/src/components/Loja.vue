@@ -20,15 +20,25 @@ export default {
         }
     },
     computed: {
-        quantidade() {
-            return this.$store.state.parametros.quantidade;
+        quantidade: {
+            get: function() {
+                return this.$store.state.parametros.quantidade;
+            },
+            set: function(quantidade) {
+                this.$store.state.parametros.quantidade=quantidade;
+            }
         },
-        preco() {
-            return this.$store.state.parametros.preco;
+        preco: {
+            get: function() {
+                return this.$store.state.parametros.preco;
+            },
+            set: function(preco) {
+                this.$store.state.parametros.preco=preco;
+            }
         }
     },
     methods: {
-        ...mapActions(['adicionarProduto']),
+        ...mapActions('carrinho', ['adicionarProduto']),
         /*adicionarProduto(produto) {
             this.$store.dispatch('adicionarProduto', produto);
         },*/
