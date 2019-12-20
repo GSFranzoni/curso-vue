@@ -6,6 +6,10 @@ import vuetify from './plugins/vuetify';
 
 Vue.config.productionTip = false
 
+Vue.filter('money', value => {
+    return 'R$' +  value.toLocaleString();
+})
+
 new Vue({
   router,
   store,

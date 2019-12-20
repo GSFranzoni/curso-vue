@@ -1,15 +1,26 @@
 <template>
-  <div class="portfolio">
-      <h1>Portfolio</h1>
-  </div>
+  <v-layout row wrap>
+      <app-stock v-for='order in orders' :order='order' :key=order.id></app-stock>
+  </v-layout>
 </template>
 
 <script>
+import Stock from "../components/portfolio/Stock";
+import { mapGetters } from 'vuex';
+
 export default {
-    name: 'portfolio'
+    name: 'portfolio',
+    components: {
+        'app-stock': Stock
+    },
+    computed: {
+        ...mapGetters({
+            orders: 'getOrders'
+        })
+    }
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>
