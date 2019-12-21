@@ -12,6 +12,12 @@
                 <v-btn @click="buyStock" class="ma-1" text color="green">Comprar</v-btn>
             </v-container>
         </v-card>
+        <transition name='fade'>
+            <v-snackbar v-model="snackbar">
+                {{ errorMessage }}
+                <v-btn color="red" text @click="snackbar = false">Close</v-btn>
+            </v-snackbar>
+        </transition>
     </v-flex>
 </template>
 
@@ -20,7 +26,9 @@ export default {
     props: ["stock"],
     data: () => {
         return {
-            quantity: 0
+            quantity: 0,
+            snackbar: false,
+            errorMessage: "Erro"
         };
     },
     methods: {
@@ -32,9 +40,9 @@ export default {
                     quantity: this.quantity
                 });
                 this.quantity = 0;
-            } 
-            catch (ex) {
-                alert(ex);
+            } catch (ex) {
+                this.errorMessage = ex.message;
+                this.snackbar = true;
             }
         }
     }
@@ -42,4 +50,5 @@ export default {
 </script>
 
 <style>
+
 </style>

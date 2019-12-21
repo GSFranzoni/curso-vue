@@ -31,7 +31,7 @@ export default new Vuex.Store({
             state.orders.push(order);
             this.commit('updateFunds', -order.price*order.quantity)
         },
-        sellStock: function(state, {order, quantity}) {
+        sellStock: function(state, {order, quantity, price}) {
             state.orders = state.orders.map(o => {
                 if(order.id == o.id)
                     o.quantity-=quantity
@@ -39,7 +39,7 @@ export default new Vuex.Store({
             }).filter(o => {
                 return o.quantity>0
             });
-            this.commit('updateFunds', quantity*order.price)
+            this.commit('updateFunds', quantity*price)
         },
         updateFunds: function(state, price) {
             state.funds+=price;
@@ -68,14 +68,14 @@ export default new Vuex.Store({
             }
             commit('buyStock', order);
         },
-        sellStock: function({commit}, {order, quantity}) {
+        sellStock: function({commit}, {order, quantity, price}) {
             if(quantity<=0) {
                 throw new Error('Quantidade inválida!');
             }
             if(order.quantity<quantity) {
                 throw new Error('Você não tem essa quantidade de ações!');
             }
-            commit('sellStock', {order, quantity});
+            commit('sellStock', {order, quantity, price});
         },
         loadData: function({ commit }) {
             Vue.prototype.$http.get('stocks.json').then(

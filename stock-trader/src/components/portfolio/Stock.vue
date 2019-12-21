@@ -12,6 +12,12 @@
                 <v-btn @click="sellStock" class="ma-1" text color="primary">Vender</v-btn>
             </v-container>
         </v-card>
+        <transition name="fade">
+            <v-snackbar v-model="snackbar">
+                {{ errorMessage }}
+                <v-btn color="red" text @click="snackbar = false">Close</v-btn>
+            </v-snackbar>
+        </transition>
     </v-flex>
 </template>
 
@@ -20,7 +26,9 @@ export default {
     props: ["order"],
     data: () => {
         return {
-            quantity: 0
+            quantity: 0,
+            snackbar: false,
+            errorMessage: "Erro"
         };
     },
     methods: {
@@ -28,11 +36,12 @@ export default {
             try {
                 this.$store.dispatch("sellStock", {
                     order: this.order,
-                    quantity: this.quantity
+                    quantity: this.quantity,
+                    price: this.$store.state.stocks.filter(s=>s.id===this.order.id)[0].price
                 });
-            } 
-            catch (ex) {
-                alert(ex.message);
+            } catch (ex) {
+                this.errorMessage = ex.message;
+                this.snackbar = true;
             }
         }
     }
