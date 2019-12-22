@@ -1,6 +1,6 @@
 <template>
   <v-layout class='d-flex justify-center flex-wrap'>
-      <app-stock v-for='order in orders' :order='order' :key=order.id></app-stock>
+      <app-stock v-for='order in orders' :order='order' :key="`${order.id}`"></app-stock>
   </v-layout>
 </template>
 

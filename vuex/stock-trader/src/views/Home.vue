@@ -26,7 +26,7 @@ export default {
     name: "home",
     computed: {
         funds: function() {
-            return this.$store.state.funds;
+            return this.$store.state.portfolio.funds;
         }
     }
 };

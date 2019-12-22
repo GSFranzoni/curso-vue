@@ -36,7 +36,7 @@
 export default {
     computed: {
         funds: function() {
-            return this.$store.state.funds;
+            return this.$store.state.portfolio.funds;
         }
     },
     methods: {

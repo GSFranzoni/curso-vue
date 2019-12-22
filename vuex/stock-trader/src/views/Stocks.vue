@@ -14,7 +14,7 @@ export default {
     },
     computed: {
         stocks() {
-            return this.$store.state.stocks;
+            return this.$store.state.stocks.stocks;
         }
     }
 };

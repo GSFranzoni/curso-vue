@@ -37,7 +37,7 @@ export default {
                 this.$store.dispatch("sellStock", {
                     order: this.order,
                     quantity: this.quantity,
-                    price: this.$store.state.stocks.filter(s=>s.id===this.order.id)[0].price
+                    price: this.$store.state.stocks.stocks.filter(s=>s.id===this.order.id)[0].price
                 });
             } catch (ex) {
                 this.errorMessage = ex.message;
