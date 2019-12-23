@@ -16,10 +16,10 @@ export default {
 .display {
     overflow-x: scroll;
     grid-column: span 4;
-    height: 17vh;
+    height: 100px;
     color: #fff;
     background-color: rgba(0, 0, 0, 0.6);
-    font-size: 4em;
+    font-size: 2.5rem;
     display: flex;
     flex-direction: row-reverse;
     justify-content: start;

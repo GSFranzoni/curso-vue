@@ -9,7 +9,7 @@ export default new Vuex.Store({
     },
     actions: {
         update: function({ commit }, key) {
-            this.state.result = this.state.result in ['0', 'Syntax error'] && /^\d+$/.test(key)? '': this.state.result;
+            this.state.result = this.state.result == '0' || this.state.result == 'Syntax error'? '': this.state.result;
             commit('update', this.state.result + key);
         },
         calculate: function({ commit }) {
