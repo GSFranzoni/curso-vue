@@ -1,17 +1,22 @@
 <template>
     <div id="app">
         <h1>Monty Hall</h1>
-        <button v-if='playing' @click="back" class="btn btn-primary btn-lg w-180 m-2">Voltar</button>
+        <button v-if="playing" @click="back" class="btn btn-primary btn-lg w-180 m-2">Voltar</button>
         <transition-group enter-active-class="animated flipInX" mode="out-in">
-            <div v-if="!playing" class="my-form" :key='1'>
+            <div v-if="!playing" class="my-form" :key="1">
                 <div class="form-group">
                     <label for="doors-quantity">Quantidade de portas</label>
-                    <input v-model="doors" class="form-control" type="number" id="doors-quantity" />
+                    <input
+                        v-model.number="doors"
+                        class="form-control"
+                        type="number"
+                        id="doors-quantity"
+                    />
                 </div>
                 <div class="form-group">
                     <label for="door-with-gift">Porta premiada</label>
                     <input
-                        v-model="doorWithGift"
+                        v-model.number="doorWithGift"
                         class="form-control"
                         type="number"
                         id="door-with-gift"
@@ -19,10 +24,10 @@
                 </div>
                 <button @click="start" class="btn btn-primary btn-lg">Começar</button>
             </div>
-            <div v-else class="doors" :key='2'>
-                <app-door v-for="n in parseInt(doors)" :label="n" :key="n" :hasGift="n==doorWithGift"></app-door>
+            <div v-else class="doors" :key="2">
+                <app-door v-for="n in doors" :label="n" :key="n" :hasGift="n==doorWithGift"></app-door>
             </div>
-        </transition-group>            
+        </transition-group>
     </div>
 </template>
 
@@ -56,7 +61,7 @@ export default {
         back: function() {
             this.doors = 3;
             this.doorWithGift = 1;
-            this.playing=false;
+            this.playing = false;
         }
     }
 };

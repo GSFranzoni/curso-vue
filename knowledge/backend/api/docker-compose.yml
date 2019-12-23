@@ -1,0 +1,25 @@
+php:
+    container_name: php
+    build: .
+    ports:
+        - "8100:80"
+        - "443:443"
+    volumes:
+        - ./public:/var/www/html
+        - ./src:/var/www/src
+    links:
+        - db
+db:
+    container_name: mysql
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+        - /var/lib/mysql
+    ports:
+        - "3310:3306"
+    environment:
+        - MYSQL_ROOT_PASSWORD=123456
+        - MYSQL_USER=franzoni
+        - MYSQL_PASSWORD=123456
+        - MYSQL_DATABASE=innout
