@@ -12,3 +12,5 @@ require_once(realpath(MODEL_PATH. '/Article.php'));
 require_once(realpath(MODEL_PATH. '/User.php'));
 
 require_once(realpath(CONTROLLER_PATH. '/UserController.php'));
+
+require_once(realpath('../vendor/autoload.php'));
