@@ -1,7 +1,7 @@
 <?php 
 
     abstract class Model {
-        protected $id;
+        public $id;
 
         public function __construct($data) {
             $this->loadFromArray($data);
@@ -26,5 +26,6 @@
             return get_object_vars($this);
         }
 
+        public abstract static function fromJson($json);
         public abstract function toJson();
     }

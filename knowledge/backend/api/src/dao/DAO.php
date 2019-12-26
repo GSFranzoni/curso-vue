@@ -14,7 +14,7 @@
         }
 
         public static function delete($id) {
-            return Database::getResultsFromQuery("DELETE FROM ". static::$tableName. " WHERE id=${id}");
+            Database::getResultsFromQuery("DELETE FROM ". static::$tableName. " WHERE id=${id}");
         }
         
         public static function update($id, $object) {
@@ -23,7 +23,7 @@
                 $set.=" ${key}=${value},";
             }
             $set[strlen($set)-1] = '';
-            return Database::getResultsFromQuery("UPDATE ". static::$tableName. $set." WHERE id=${id}");
+            Database::getResultsFromQuery("UPDATE ". static::$tableName. $set." WHERE id=${id}");
         }
 
         public static function insert($object) {
@@ -31,11 +31,11 @@
             foreach ($object as $key => $value) {
                 $values.=static::getFormatedValue($value). ",";
             }
-            $values[strlen($value)-1] = ')';
-            return Database::getResultsFromQuery("INSERT INTO ". static::$tableName. "(". implode(',', static::$columns). ")". $values);
+            $values[strlen($values)-1] = ')';
+            Database::getResultsFromQuery("INSERT INTO ". static::$tableName. "(". implode(',', static::$columns). ")". $values);
         }
 
-        private static function getFormatedValue($value) {
+        public static function getFormatedValue($value) {
             if(is_null($value)) {
                 return "null";
             }

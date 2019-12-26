@@ -11,7 +11,7 @@
                 $environment['port']
             );
             if($connection->connect_error) {
-                die("Error: ". $connection->connect_error);
+                throw new Exception($connection->connect_error);
             }
             return $connection;
         }
@@ -19,6 +19,9 @@
         public static function getResultsFromQuery($sql) {
             $connection = self::getConnection();
             $result = $connection->query($sql);
+            if($connection->error) {
+                throw new Exception($connection->error);
+            }
             $connection->close();
             return $result;
         }
