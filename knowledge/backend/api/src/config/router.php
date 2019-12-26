@@ -8,10 +8,20 @@ use Slim\Factory\AppFactory;
 
 $app = AppFactory::create();
 
+$app->addBodyParsingMiddleware();
+
+$app->get('/users', function (Request $request, Response $response, $args) {
+    $response->getBody()->write(UserController::getAll());
+    return $response;
+});
+
 $app->get('/users/{id}', function (Request $request, Response $response, $args) {
-    $response->getBody()->write(json_encode(
-        array('id' => $args['id'], 'name' => $_GET['name'])
-    ));
+    $response->getBody()->write(UserController::get($args['id']));
+    return $response;
+});
+
+$app->get('/users/{id}/delete', function (Request $request, Response $response, $args) {
+    $response->getBody()->write(UserController::delete($args['id']));
     return $response;
 });
 

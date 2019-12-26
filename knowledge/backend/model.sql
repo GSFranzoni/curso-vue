@@ -1,3 +1,6 @@
+drop database if exists knowledge;
+create database knowledge;
+use knowledge;
 create table if not exists User (
     id INT NOT NULL,
     email VARCHAR(200) NOT NULL,
@@ -22,7 +25,3 @@ create table if not exists Article (
     user INT NOT NULL,
 	description varchar(2000) NOT NULL,
     content NVARCHAR(10000) NOT NULL,
-    constraint pk_article PRIMARY KEY (id),
-    constraint fk_article_to_user foreign key(user) references User(id),
-    constraint fk_article_to_category foreign key(category) references Category(id)
-);

@@ -12,5 +12,8 @@ require_once(realpath(MODEL_PATH. '/Article.php'));
 require_once(realpath(MODEL_PATH. '/User.php'));
 
 require_once(realpath(CONTROLLER_PATH. '/UserController.php'));
+require_once(realpath(DAO_PATH. '/DAO.php'));
+require_once(realpath(DAO_PATH. '/UserDAO.php'));
 
 require_once(realpath('../vendor/autoload.php'));
+require_once(realpath(dirname(__FILE__). '/../config/database.php'));

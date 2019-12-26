@@ -1,17 +1,30 @@
 <?php 
 
     class UserController {
+
         public static function get($id) {
-            return (new User(
-                Array(
-                    'id' => 0,
-                    'name' => 'José',
-                    'age' => 22,
-                    'email' => 'jose@email.com',
-                    'password' => 'KLNMVD09njk0-924OJ3'
-                )
-            ))->toJson();
+            $result = UserDAO::get($id);
+            if($result->num_rows > 0) {
+                $user = new User($result->fetch_assoc());
+            } 
+            return $user->toJson();
         }
+
+        public static function getAll() {
+            $result = UserDAO::getAll();
+            $users = [];
+            if($result->num_rows > 0) {
+                while($user = $result->fetch_assoc()) {
+                    array_push($users, (new User($user)));
+                }
+            } 
+            return json_encode($users);
+        }
+        
+        public static function delete($id) {
+            return json_encode(UserDAO::delete($id));
+        }
+        
     }
 
 ?>
