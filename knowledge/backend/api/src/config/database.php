@@ -10,8 +10,8 @@
                 $environment['database'],
                 $environment['port']
             );
-            if($connection->connect_error) {
-                throw new Exception($connection->connect_error);
+            if($connection->error) {
+                throw new Exception($connection->error);
             }
             return $connection;
         }

@@ -31,10 +31,16 @@ class CategoryDAO extends DAO
 
     public static function insert($category)
     {
-        $category->path = $category->name;
-        if($category->parent) {
+        foreach (static::$columns as $column) {
+            if(!isset($category[$column]) and $column!='id' and $column!='path' and $column!='parent') {
+                throw new Exception('O campo '. $column. ' é requerido!');
+                return;
+            }
+         }
+        $category['path'] = $category['name'];
+        if($category['parent']) {
             try {
-                $category->path = Category::fromJson(CategoryController::get($category->parent))->path. " > ". $category->path;
+                $category['path'] = Category::fromJson(CategoryController::get($category['parent']))->path. " > ". $category['path'];
             }
             catch(Error $err) {
                 throw new Exception('A categoria pai informada não existe!');

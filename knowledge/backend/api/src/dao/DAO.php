@@ -9,6 +9,10 @@
             return Database::getResultsFromQuery("SELECT ". implode(',', static::$columns). " FROM ". static::$tableName. " WHERE id=${id}");
         }
 
+        public static function count() {
+            return (int) Database::getResultsFromQuery("SELECT COUNT(*) as count FROM ". static::$tableName)->fetch_array()[0];
+        }
+
         public static function getAll() {
             return Database::getResultsFromQuery("SELECT ". implode(',', static::$columns). " FROM ". static::$tableName);
         }
@@ -18,15 +22,21 @@
         }
         
         public static function update($id, $object) {
-            $set = 'SET';
+            $set = ' SET';
             foreach ($object as $key => $value) {
-                $set.=" ${key}=${value},";
+                $set.=" ${key}=". static::getFormatedValue($value). ",";
             }
-            $set[strlen($set)-1] = '';
+            $set[strlen($set)-1] = ' ';
             Database::getResultsFromQuery("UPDATE ". static::$tableName. $set." WHERE id=${id}");
         }
 
         public static function insert($object) {
+            foreach (static::$columns as $column) {
+                if(!isset($object[$column]) and $column!='id') {
+                    throw new Exception('O campo '. $column. ' é requerido!');
+                    return;
+                }
+             }
             $values = " VALUES(";
             foreach ($object as $key => $value) {
                 $values.=static::getFormatedValue($value). ",";

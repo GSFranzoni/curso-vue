@@ -14,6 +14,10 @@
             return $object->toJson();
         }
 
+        public static function count() {
+            return json_encode(static::$dao::count());
+        }
+
         public static function getAll() {
             $result = static::$dao::getAll();
             $array = [];
@@ -31,6 +35,10 @@
 
         public static function insert($object) {
             static::$dao::insert($object);
+        }
+
+        public static function update($id, $object) {
+            static::$dao::update($id, $object);
         }
     }
 
