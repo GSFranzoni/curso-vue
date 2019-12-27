@@ -9,6 +9,14 @@
             return UserDAO::signin($email, $password);
         }
 
+        public static function signup($user) {
+            UserDAO::signup($user);
+        }
+
+        public static function getByEmail($email) {
+            return UserDAO::getByEmail($email);
+        }
+
     }
 
 ?>

@@ -14,7 +14,35 @@
             ) {
                 throw new Exception('Email ou senha não correspondem!');
             }
-            return Auth::generateToken($email);
+            $user = static::getByEmail($email);
+            return Auth::generateToken($user);
+        }
+
+        public static function signup($user) {
+            foreach (static::$columns as $column) {
+                if (!isset($user[$column]) and $column != 'id') {
+                    throw new Exception('O campo ' . $column . ' é requerido!');
+                    return;
+                } else if ($user[$column] == '' and $column != 'id' and $column!='admin' ) {
+                    throw new Exception('O campo ' . $column . ' é inválido!');
+                    return;
+                }
+            }
+            $values = " VALUES(0, ";
+            $user['admin'] = "0";
+            foreach (static::$columns as $column) {
+                if ($column != 'id')
+                    $values .= static::getFormatedValue($user[$column]) . ",";
+            }
+            $values[strlen($values) - 1] = ')';
+            Database::getResultsFromQuery("INSERT INTO " . static::$tableName . "(" . implode(',', static::$columns) . ")" . $values);
+        }
+
+        public static function getByEmail($email) {
+            $result = Database::getResultsFromQuery("SELECT name, email, admin, id FROM User WHERE email=". static::getFormatedValue($email));
+            if($result->num_rows>0)
+                return $result->fetch_assoc();
+            return [];
         }
         
     }

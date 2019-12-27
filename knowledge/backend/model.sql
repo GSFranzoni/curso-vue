@@ -2,7 +2,7 @@ drop database if exists knowledge;
 create database knowledge;
 use knowledge;
 create table if not exists User (
-    id INT NOT NULL,
+    id INT AUTO_INCREMENT,
     email VARCHAR(200) NOT NULL,
     password VARCHAR(50) NOT NULL,
     name VARCHAR(300) NOT NULL,
@@ -11,7 +11,7 @@ create table if not exists User (
 );
 
 create table if not exists Category (
-    id INT NOT NULL,
+    id INT AUTO_INCREMENT,
     name VARCHAR(300) NOT NULL,
     parent INT,
     path VARCHAR(200) NOT NULL,
@@ -20,7 +20,7 @@ create table if not exists Category (
 );
 
 create table if not exists Article (
-    id INT NOT NULL,
+    id INT AUTO_INCREMENT,
     name VARCHAR(300) NOT NULL,
     category INT NOT NULL,
     user INT NOT NULL,

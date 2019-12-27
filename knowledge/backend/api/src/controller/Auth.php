@@ -5,11 +5,13 @@ use \Firebase\JWT\JWT;
 class Auth
 {
     const SECRET = 'DFSOM23890R90NIFWE0JR234';
-    const DURATION = 120;
+    const DURATION = 1000;
 
-    public static function generateToken($email) {
+    public static function generateToken($user) {
         $payload = array(
-            "email" => $email,
+            "email" => $user['email'],
+            "admin" => $user['admin'],
+            "name" => $user['name'],
             "exp" => time() + Auth::DURATION,
             "iat" => time()
         );
@@ -26,5 +28,16 @@ class Auth
             return false;
         }
     }
+
+    public static function isAdmin($token)
+    {
+        try{
+            $decoded = JWT::decode($token, Auth::SECRET, array('HS256'));
+            return $decoded->admin;
+        }
+        catch(Exception $e) {
+            throw new Exception('Token inválido!');
+        }
+    } 
 
 }
