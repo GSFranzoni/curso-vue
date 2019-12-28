@@ -12,6 +12,11 @@ class ComposerStaticInit8b37070b9949ea1841d8c205ede7e2a4
     );
 
     public static $prefixLengthsPsr4 = array (
+        'T' => 
+        array (
+            'Tuupola\\Middleware\\' => 19,
+            'Tuupola\\Http\\Factory\\' => 21,
+        ),
         'S' => 
         array (
             'Slim\\Tests\\' => 11,
@@ -20,9 +25,14 @@ class ComposerStaticInit8b37070b9949ea1841d8c205ede7e2a4
         ),
         'P' => 
         array (
+            'Psr\\Log\\' => 8,
             'Psr\\Http\\Server\\' => 16,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
+        ),
+        'N' => 
+        array (
+            'Neomerx\\Cors\\' => 13,
         ),
         'F' => 
         array (
@@ -32,6 +42,15 @@ class ComposerStaticInit8b37070b9949ea1841d8c205ede7e2a4
     );
 
     public static $prefixDirsPsr4 = array (
+        'Tuupola\\Middleware\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/tuupola/callable-handler/src',
+            1 => __DIR__ . '/..' . '/tuupola/cors-middleware/src',
+        ),
+        'Tuupola\\Http\\Factory\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/tuupola/http-factory/src',
+        ),
         'Slim\\Tests\\' => 
         array (
             0 => __DIR__ . '/..' . '/slim/slim/tests',
@@ -43,6 +62,10 @@ class ComposerStaticInit8b37070b9949ea1841d8c205ede7e2a4
         'Slim\\' => 
         array (
             0 => __DIR__ . '/..' . '/slim/slim/Slim',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
         'Psr\\Http\\Server\\' => 
         array (
@@ -57,6 +80,10 @@ class ComposerStaticInit8b37070b9949ea1841d8c205ede7e2a4
         'Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'Neomerx\\Cors\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/neomerx/cors-psr7/src',
         ),
         'Fig\\Http\\Message\\' => 
         array (

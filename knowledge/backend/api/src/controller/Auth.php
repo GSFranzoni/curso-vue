@@ -5,7 +5,7 @@ use \Firebase\JWT\JWT;
 class Auth
 {
     const SECRET = 'DFSOM23890R90NIFWE0JR234';
-    const DURATION = 1000;
+    const DURATION = 1000000;
 
     public static function generateToken($user) {
         $payload = array(

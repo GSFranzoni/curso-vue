@@ -10,6 +10,16 @@ use Slim\Factory\AppFactory;
 
 $app = AppFactory::create();
 
+
+
+$app->add(function ($request, $handler) {
+    $response = $handler->handle($request);
+    return $response
+            ->withHeader('Access-Control-Allow-Origin', 'http://localhost:8080')
+            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+});
+
 $app->addBodyParsingMiddleware();
 
 $authorizationMiddleware = function (Request $request, RequestHandler $handler) {
@@ -32,7 +42,7 @@ $authorizationMiddleware = function (Request $request, RequestHandler $handler) 
 $adminMiddleware = function (Request $request, RequestHandler $handler) {
     $response = $handler->handle($request);
     $authorization = $request->getHeader('Authorization')[0];
-    if(!Auth::isAdmin($authorization)) {
+    if(Auth::validateToken($authorization) and !Auth::isAdmin($authorization)) {
         $response = new RespondeModel();
         $response->getBody()->write(
             json_encode(
@@ -106,7 +116,7 @@ $app->put('/users/{id}', function (Request $request, Response $response, $args) 
     return $response;
 })->add($authorizationMiddleware)->add($adminMiddleware);
 
-$app->post('/signup', function (Request $request, Response $response, $args) {
+$app->post('/users', function (Request $request, Response $response, $args) {
     try {
         UserController::signup(json_decode($request->getBody(), true));
         $data = $request->getBody();
@@ -359,6 +369,10 @@ $app->post('/validate', function (Request $request, Response $response, $args) {
         $status = 400;
     }
     $response->getBody()->write(json_encode(array('message' => $message, 'status' => $status)));
+    return $response;
+});
+
+$app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;
 });
 
