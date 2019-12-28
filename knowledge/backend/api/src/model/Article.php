@@ -1,7 +1,7 @@
 <?php 
 
     class Article extends Model implements JsonSerializable {
-        protected $name, $user, $category, $content, $image;
+        protected $name, $user, $category, $description, $content, $image;
 
         public function __construct($data){
             parent::__construct($data);
@@ -22,7 +22,8 @@
                'user' => (int) $this->user,
                'category' => (int) $this->category,
                'content' => $this->content,
-               'image' => $this->image
+               'image' => $this->image,
+               'description' => $this->description
             );
         }
     }

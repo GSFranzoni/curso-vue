@@ -10,8 +10,6 @@ use Slim\Factory\AppFactory;
 
 $app = AppFactory::create();
 
-
-
 $app->add(function ($request, $handler) {
     $response = $handler->handle($request);
     return $response
@@ -202,7 +200,7 @@ $app->delete('/categories/{id}', function (Request $request, Response $response,
         $status = 200;
     }
     catch(Exception $ex) {
-        $message = $ex->getMessage();
+        $message = "Erro ao excluir: Foreign key";
         $status = 500;
     }
     $response->getBody()->write(json_encode(Array('status' => $status, 'message' => $message)));
@@ -231,7 +229,7 @@ $app->get('/articles', function (Request $request, Response $response, $args) {
         $page = $_GET['page'] ?? 1;
         $data = array(
             'articles' => ArticleController::getAllWithPagination($page),
-            'limit' => 10,
+            'limit' => ArticleDAO::limit,
             'count' => ArticleController::count()
         );
         $status = '200';
@@ -309,7 +307,7 @@ $app->put('/articles/{id}', function (Request $request, Response $response, $arg
 
 $app->get('/categories/{category}/articles', function (Request $request, Response $response, $args) {
     try {
-        $data = ArticleController::getByCategory((int)$args['category']);
+        $data = ArticleController::getByCategory((int)$args['category'], $_GET['page']);
         $message = 'Recuperação de registros efetuada com sucesso!';
         $status = 200;
     }

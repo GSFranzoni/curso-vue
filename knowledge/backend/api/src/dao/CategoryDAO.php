@@ -3,13 +3,12 @@
 class CategoryDAO extends DAO
 {
 
-    static $columns = array('path', 'id', 'name', 'parent');
+    static $columns = array('id', 'name', 'parent');
     static $tableName = 'Category';
 
     public static function getTree()
     {
-        $categories = json_decode(CategoryController::getAll(), true);
-        return static::toTree($categories);
+        return static::toTree(CategoryController::getAll());
     }
 
     public static function toTree($categories, $tree = null)
@@ -29,6 +28,30 @@ class CategoryDAO extends DAO
         return $tree;
     }
 
+    public static function getAll() {
+        $result = Database::getResultsFromQuery("SELECT * FROM Category");
+        $categories = [];
+        if($result->num_rows > 0) {
+            while($category = $result->fetch_assoc()) {
+                $category['path'] = static::getPath($category, $categories, $category['name']);
+                array_push($categories, $category);
+            }
+        }
+        return $categories;
+    }
+
+    public static function getPath($category, $categories, $path) {
+        if(!$category['parent']) {
+            return $path!=''? $path: '';
+        }
+        $parent = array_filter($categories, function($c) use ($category) {
+            return $category['parent'] === $c['id'];
+        })[0];
+        $path = $parent['name']. ' > '. $path;
+        static::getPath($parent, $categories, $path);
+        return $path;
+    }
+
     public static function insert($category)
     {
         foreach (static::$columns as $column) {
@@ -37,15 +60,6 @@ class CategoryDAO extends DAO
                 return;
             }
          }
-        $category['path'] = $category['name'];
-        if($category['parent']) {
-            try {
-                $category['path'] = Category::fromJson(CategoryController::get($category['parent']))->path. " > ". $category['path'];
-            }
-            catch(Error $err) {
-                throw new Exception('A categoria pai informada não existe!');
-            }
-        }
         $cols = " (";
         $values = " VALUES(";
         foreach ($category as $key => $value) {

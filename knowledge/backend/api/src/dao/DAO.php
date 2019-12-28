@@ -30,7 +30,7 @@ class DAO
     {
         $set = ' SET';
         foreach ($object as $key => $value) {
-            if ($value == '' and $key != 'id') {
+            if (($value === '') and $key != 'id') {
                 throw new Exception('O campo ' . $key . ' é inválido!');
                 return;
             }

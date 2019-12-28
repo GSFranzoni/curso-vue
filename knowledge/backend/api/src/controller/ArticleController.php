@@ -12,18 +12,18 @@ class ArticleController extends Controller
         $array = [];
         if ($result->num_rows > 0) {
             while ($object = $result->fetch_assoc()) {
-                array_push($array, (new static::$model($object)));
+                array_push($array, ($object));
             }
         }
-        return json_encode($array);
+        return ($array);
     }
 
-    public static function getByCategory($category) {
-        $result = ArticleDAO::getByCategory($category);
+    public static function getByCategory($category, $page) {
+        $result = ArticleDAO::getByCategory($category, $page);
         $array = [];
         if($result->num_rows > 0) {
             while($object = $result->fetch_assoc()) {
-                array_push($array, (new static::$model($object)));
+                array_push($array, ($object));
             }
         } 
         return ($array);

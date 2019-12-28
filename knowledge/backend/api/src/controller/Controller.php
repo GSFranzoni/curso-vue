@@ -5,12 +5,9 @@
         protected static $model = 'MODEL';
         
         public static function get($id) {
-
             $result = static::$dao::get($id);
-            
             if($result->num_rows > 0) {
-                $object = new static::$model($result->fetch_assoc());
-                return $object;
+                return $result->fetch_assoc();
             } 
             throw new Exception('Registro não encontrado', 401);
         }
@@ -27,7 +24,7 @@
             $array = [];
             if($result->num_rows > 0) {
                 while($object = $result->fetch_assoc()) {
-                    array_push($array, (new static::$model($object)));
+                    array_push($array, $object);
                 }
             } 
             return ($array);

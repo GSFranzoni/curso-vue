@@ -48,7 +48,7 @@ body, html {
 
 .resize-enter-active,
 .resize-leave-active {
-    transition: width 0.45s linear;
+    transition: width 0.3s linear;
 }
 .resize-enter,
 .resize-leave-to {

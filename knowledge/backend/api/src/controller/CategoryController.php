@@ -8,7 +8,20 @@ class CategoryController extends Controller {
     public static function getTree() {
         if(static::count()==0) 
             return [];
-        return json_encode(CategoryDAO::getTree());
+        return (CategoryDAO::getTree());
+    }
+
+    public static function update($id, $category) {
+        
+        if(isset($category['parent']) and $category['parent'] === 0 or $category['parent'] === '') {
+            $category['parent'] = null;
+        }
+
+        CategoryDAO::update($id, $category);
+    }
+
+    public static function getAll() {
+        return CategoryDAO::getAll();
     }
 }
 
