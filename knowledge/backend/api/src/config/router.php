@@ -2,13 +2,22 @@
 
 header("Content-type: application/json");
 
-use Slim\Psr7\Response as RespondeModel;
+use Slim\Psr7\Response as ResponseModel;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Factory\AppFactory;
 
 $app = AppFactory::create();
+
+$customErrorHandler = function () use ($app) {
+    $response = $app->getResponseFactory()->createResponse();
+    $response->getBody()->write('404 - not found');
+    return $response->withStatus(404);
+};
+
+$errorMiddleware = $app->addErrorMiddleware(true, true, true);
+$errorMiddleware->setErrorHandler(Slim\Exception\HttpNotFoundException::class, $customErrorHandler);
 
 $app->add(function ($request, $handler) {
     $response = $handler->handle($request);
@@ -24,7 +33,7 @@ $authorizationMiddleware = function (Request $request, RequestHandler $handler) 
     $response = $handler->handle($request);
     $authorization = $request->getHeader('Authorization')[0];
     if(!Auth::validateToken($authorization)) {
-        $response = new RespondeModel();
+        $response = new ResponseModel();
         $response->getBody()->write(
             json_encode(
                 array(
@@ -33,6 +42,7 @@ $authorizationMiddleware = function (Request $request, RequestHandler $handler) 
                 )
             )
         );
+        return $response->withStatus(401);
     }
     return $response;
 };
@@ -41,15 +51,16 @@ $adminMiddleware = function (Request $request, RequestHandler $handler) {
     $response = $handler->handle($request);
     $authorization = $request->getHeader('Authorization')[0];
     if(Auth::validateToken($authorization) and !Auth::isAdmin($authorization)) {
-        $response = new RespondeModel();
+        $response = new ResponseModel();
         $response->getBody()->write(
             json_encode(
                 array(
                     'message' => 'É preciso ser administrador para executar esta ação!',
-                    'status' => 402
+                    'status' => 401
                 )
             )
         );
+        return $response->withStatus(401);
     }
     return $response;
 };
@@ -63,10 +74,10 @@ $app->get('/users', function (Request $request, Response $response, $args) {
     catch(Exception $e) {
         $data = [];
         $message = $e->getMessage();
-        $status = $e->getCode();
+        $status = 400;
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
-    return $response;
+    return $response->withStatus($status);
 })->add($authorizationMiddleware)->add($adminMiddleware);
 
 $app->get('/users/{id}', function (Request $request, Response $response, $args) {
@@ -78,11 +89,11 @@ $app->get('/users/{id}', function (Request $request, Response $response, $args) 
     catch(Exception $e) {
         $data = [];
         $message = $e->getMessage();
-        $status = $e->getCode();
+        $status = 400;
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
-    return $response;
-})->add($authorizationMiddleware)->add($adminMiddleware);
+    return $response->withStatus($status);
+})->add($authorizationMiddleware);
 
 $app->delete('/users/{id}', function (Request $request, Response $response, $args) {
     try {
@@ -94,8 +105,8 @@ $app->delete('/users/{id}', function (Request $request, Response $response, $arg
         $message = $ex->getMessage();
         $status = $ex->getCode();
     }
-    $response->getBody()->write(json_encode(Array('status' => $status, 'message' => $message)));
-    return $response;
+    $response->getBody()->write(json_encode(array('message' => $message, 'status' => $status)));
+    return $response->withStatus($status);
 })->add($authorizationMiddleware)->add($adminMiddleware);
 
 $app->put('/users/{id}', function (Request $request, Response $response, $args) {
@@ -110,14 +121,14 @@ $app->put('/users/{id}', function (Request $request, Response $response, $args) 
         $message = $ex->getMessage();
         $status = $ex->getCode();
     }
-    $response->getBody()->write(json_encode(array('message' => $message, 'status' => $status, 'data' => $data)));
-    return $response;
+    $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
+    return $response->withStatus($status);
 })->add($authorizationMiddleware)->add($adminMiddleware);
 
 $app->post('/users', function (Request $request, Response $response, $args) {
     try {
-        UserController::signup(json_decode($request->getBody(), true));
         $data = $request->getBody();
+        UserController::signup(json_decode($request->getBody(), true));
         $message = 'Usuário registrado com sucesso!';
         $status = 200;
     }
@@ -126,9 +137,9 @@ $app->post('/users', function (Request $request, Response $response, $args) {
         $message = $ex->getMessage();
         $status = $ex->getCode();
     }
-    $response->getBody()->write(json_encode(array('message' => $message, 'status' => $status, 'data' => $data)));
-    return $response;
-})->add($authorizationMiddleware)->add($adminMiddleware);
+    $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
+    return $response->withStatus($status);
+});
 
 $app->get('/categories', function (Request $request, Response $response, $args) {
     try {
@@ -142,8 +153,8 @@ $app->get('/categories', function (Request $request, Response $response, $args) 
         $status = $e->getCode();
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
-    return $response;
-})->add($authorizationMiddleware);;
+    return $response->withStatus($status);
+})->add($authorizationMiddleware)->add($adminMiddleware);
 
 
 $app->get('/categories/tree', function (Request $request, Response $response, $args) {
@@ -158,8 +169,8 @@ $app->get('/categories/tree', function (Request $request, Response $response, $a
         $status = $e->getCode();
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
-    return $response;
-})->add($authorizationMiddleware);;
+    return $response->withStatus($status);
+});
 
 
 $app->get('/categories/{id}', function (Request $request, Response $response, $args) {
@@ -174,7 +185,7 @@ $app->get('/categories/{id}', function (Request $request, Response $response, $a
         $status = $e->getCode();
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
-    return $response;
+    return $response->withStatus($status);
 })->add($authorizationMiddleware);
 
 $app->post('/categories', function (Request $request, Response $response, $args) {
@@ -189,8 +200,8 @@ $app->post('/categories', function (Request $request, Response $response, $args)
         $message = $ex->getMessage();
         $status = $ex->getCode();
     }
-    $response->getBody()->write(json_encode(array('message' => $message, 'status' => $status, 'data' => $data)));
-    return $response;
+    $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
+    return $response->withStatus($status);
 })->add($authorizationMiddleware)->add($adminMiddleware);
 
 $app->delete('/categories/{id}', function (Request $request, Response $response, $args) {
@@ -201,10 +212,10 @@ $app->delete('/categories/{id}', function (Request $request, Response $response,
     }
     catch(Exception $ex) {
         $message = "Erro ao excluir: Foreign key";
-        $status = 500;
+        $status = 400;
     }
-    $response->getBody()->write(json_encode(Array('status' => $status, 'message' => $message)));
-    return $response;
+    $response->getBody()->write(json_encode(array('message' => $message, 'status' => $status)));
+    return $response->withStatus($status);
 })->add($authorizationMiddleware)->add($adminMiddleware);
 
 $app->put('/categories/{id}', function (Request $request, Response $response, $args) {
@@ -219,8 +230,8 @@ $app->put('/categories/{id}', function (Request $request, Response $response, $a
         $message = $ex->getMessage();
         $status = $ex->getCode();
     }
-    $response->getBody()->write(json_encode(array('message' => $message, 'status' => $status, 'data' => $data)));
-    return $response;
+    $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
+    return $response->withStatus($status);
 })->add($authorizationMiddleware)->add($adminMiddleware);
 
 
@@ -232,8 +243,8 @@ $app->get('/articles', function (Request $request, Response $response, $args) {
             'limit' => ArticleDAO::limit,
             'count' => ArticleController::count()
         );
-        $status = '200';
-        $message = 'Registro recuperados com sucesso!';
+        $status = 200;
+        $message = 'Registros recuperados com sucesso!';
     }
     catch(Exception $e) {
         $data = [];
@@ -241,7 +252,7 @@ $app->get('/articles', function (Request $request, Response $response, $args) {
         $status = $e->getCode();
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
-    return $response;
+    return $response->withStatus($status);
 })->add($authorizationMiddleware)->add($adminMiddleware);
 
 $app->get('/articles/{id}', function (Request $request, Response $response, $args) {
@@ -256,7 +267,7 @@ $app->get('/articles/{id}', function (Request $request, Response $response, $arg
         $status = $e->getCode();
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
-    return $response;
+    return $response->withStatus($status);
 })->add($authorizationMiddleware);
 
 $app->delete('/articles/{id}', function (Request $request, Response $response, $args) {
@@ -269,8 +280,8 @@ $app->delete('/articles/{id}', function (Request $request, Response $response, $
         $message = $ex->getMessage();
         $status = $ex->getCode();
     }
-    $response->getBody()->write(json_encode(Array('status' => $status, 'message' => $message)));
-    return $response;
+    $response->getBody()->write(json_encode(array('message' => $message, 'status' => $status)));
+    return $response->withStatus($status);
 })->add($authorizationMiddleware)->add($adminMiddleware);
 
 $app->post('/articles', function (Request $request, Response $response, $args) {
@@ -285,8 +296,8 @@ $app->post('/articles', function (Request $request, Response $response, $args) {
         $message = $ex->getMessage();
         $status = $ex->getCode();
     }
-    $response->getBody()->write(json_encode(array('message' => $message, 'status' => $status, 'data' => $data)));
-    return $response;
+    $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
+    return $response->withStatus($status);
 })->add($authorizationMiddleware)->add($adminMiddleware);;
 
 $app->put('/articles/{id}', function (Request $request, Response $response, $args) {
@@ -301,8 +312,8 @@ $app->put('/articles/{id}', function (Request $request, Response $response, $arg
         $message = $ex->getMessage();
         $status = $ex->getCode();
     }
-    $response->getBody()->write(json_encode(array('message' => $message, 'status' => $status, 'data' => $data)));
-    return $response;
+    $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
+    return $response->withStatus($status);
 })->add($authorizationMiddleware)->add($adminMiddleware);
 
 $app->get('/categories/{category}/articles', function (Request $request, Response $response, $args) {
@@ -317,7 +328,7 @@ $app->get('/categories/{category}/articles', function (Request $request, Respons
         $status = $e->getCode();
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
-    return $response;
+    return $response->withStatus($status);
 })->add($authorizationMiddleware);
 
 $app->get('/stats', function (Request $request, Response $response, $args) {
@@ -332,7 +343,7 @@ $app->get('/stats', function (Request $request, Response $response, $args) {
         $status = $e->getCode();
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
-    return $response;
+    return $response->withStatus($status);
 })->add($authorizationMiddleware);
 
 $app->post('/signin', function (Request $request, Response $response, $args) {
@@ -353,7 +364,7 @@ $app->post('/signin', function (Request $request, Response $response, $args) {
         $status = 400;
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
-    return $response;
+    return $response->withStatus($status);
 });
 
 $app->post('/validate', function (Request $request, Response $response, $args) {
@@ -367,11 +378,7 @@ $app->post('/validate', function (Request $request, Response $response, $args) {
         $status = 400;
     }
     $response->getBody()->write(json_encode(array('message' => $message, 'status' => $status)));
-    return $response;
-});
-
-$app->options('/{routes:.+}', function ($request, $response, $args) {
-    return $response;
+    return $response->withStatus($status);
 });
 
 $app->run();

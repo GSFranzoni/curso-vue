@@ -19,6 +19,7 @@
         }
 
         public static function signup($user) {
+            $user['admin'] = "0";
             foreach (static::$columns as $column) {
                 if (!isset($user[$column]) and $column != 'id') {
                     throw new Exception('O campo ' . $column . ' é requerido!');
@@ -29,7 +30,6 @@
                 }
             }
             $values = " VALUES(0, ";
-            $user['admin'] = "0";
             foreach (static::$columns as $column) {
                 if ($column != 'id')
                     $values .= static::getFormatedValue($user[$column]) . ",";

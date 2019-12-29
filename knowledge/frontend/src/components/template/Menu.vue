@@ -1,5 +1,5 @@
 <template>
-    <aside class="menu">
+    <aside class="menu" v-show="isMenuVisible">
         <div class="menu-filter">
             <i class="fa fa-search fa-lg"></i>
             <input 
@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Tree from 'liquor-tree';
 import { baseApiUrl } from '@/global';
 import axios from 'axios';
@@ -44,11 +45,15 @@ export default {
                 name: 'ArticlesByCategory',
                 params: { id: node.id }
             })
+            if(this.$mq === 'xs' || this.$mq === 'sm') {
+                this.$store.commit('toggleMenu', false);
+            }
         }
     },
     mounted: function() {
         this.$refs.tree.$on('node:selected', this.onNodeSelect);
-    }
+    },
+    computed: mapState(['isMenuVisible'])
 };
 </script>
 

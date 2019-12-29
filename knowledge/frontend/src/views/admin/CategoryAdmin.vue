@@ -56,32 +56,22 @@ export default {
             delete this.category.path;
             axios[method](`${baseApiUrl}/categories${id}`, this.category)
                 .then(response => {
-                    if(response.data.status === 200) {
-                        showSuccess(response.data.message)
-                        this.reset();
-                    }
-                    else {
-                        showError(response.data.message);
-                    }
+                    showSuccess(response.data.message)
+                    this.reset();
                 })
                 .catch(e => {
-                    showError("Erro" + e);
+                    showError(e.response.data.message);
                 });
         },
         remove: function() {
             axios
                 .delete(`${baseApiUrl}/categories/${this.category.id}`)
                 .then(response => {
-                    if(response.data.status === 200) {
-                        showSuccess(response.data.message)
-                        this.reset();
-                    }
-                    else {
-                        showError(response.data.message);
-                    }
+                    showSuccess(response.data.message)
+                    this.reset();
                 })
                 .catch(e => {
-                    showError(e);
+                    showError(e.response.data.message);
                 });
         },
         reset: function() {
@@ -102,10 +92,9 @@ export default {
                     this.categories.forEach(element => {
                         this.options.push({ value: element.id, text: element.path })
                     })
-
                 })
                 .catch(e => {
-                    showError(e);
+                    showError(e.response.data.message);
                 });
         },
         getCategoryName: function(id) {

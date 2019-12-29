@@ -12,7 +12,9 @@
 </template>
 
 <script>
-import { baseApiUrl } from '@/global';
+import 'highlightjs/styles/dracula.css'
+import hljs from 'highlightjs/highlight.pack.js'
+import { baseApiUrl, showError } from '@/global';
 import axios from 'axios';
 import PageTitle from '@/components/template/PageTitle';
 
@@ -28,6 +30,15 @@ export default {
         const url = `${baseApiUrl}/articles/${this.$route.params.id}`;
         axios.get(url).then(
             response => this.article = response.data.data
+        ).catch(e => {
+            showError(e.response.data.message);
+        })
+    },
+    updated: function() {
+        document.querySelectorAll('.article-content pre').forEach(
+            element => {
+                hljs.highlightBlock(element);
+            }
         )
     }
 }

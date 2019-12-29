@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { baseApiUrl } from '@/global';
+import { baseApiUrl, showError } from '@/global';
 import axios from 'axios';
 
 export default {
@@ -37,7 +37,9 @@ export default {
             response => {
                 this.article.author = response.data.data.name;
             }
-        )
+        ).catch(e=> {
+            showError(e.response.data.message);
+        })
     }
 }
 </script>

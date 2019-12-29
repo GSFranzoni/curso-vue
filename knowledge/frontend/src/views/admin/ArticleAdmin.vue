@@ -81,32 +81,22 @@ export default {
             const id = this.article.id ? `/${this.article.id}` : "";
             axios[method](`${baseApiUrl}/articles${id}`, this.article)
                 .then(response => {
-                    if(response.data.status === 200) {
-                        showSuccess(response.data.message)
-                        this.reset();
-                    }
-                    else {
-                        showError(response.data.message);
-                    }
+                    showSuccess(response.data.message)
+                    this.reset();
                 })
                 .catch(e => {
-                    showError("Erro" + e);
+                    showError(e.response.data.message);
                 });
         },
         remove: function() {
             axios
                 .delete(`${baseApiUrl}/articles/${this.article.id}`)
                 .then(response => {
-                    if(response.data.status === 200) {
-                        showSuccess(response.data.message)
-                        this.reset();
-                    }
-                    else {
-                        showError(response.data.message);
-                    }
+                    showSuccess(response.data.message)
+                    this.reset();
                 })
                 .catch(e => {
-                    showError(e);
+                    showError(e.response.data.message);
                 });
         },
         reset: function() {
@@ -127,7 +117,7 @@ export default {
                     this.count = response.data.data.count;
                 })
                 .catch(e => {
-                    showError(e);
+                    showError(e.response.data.message);
                 });
         },
         loadCategories: function() {
@@ -141,7 +131,7 @@ export default {
                     );
                 })
                 .catch(e => {
-                    showError(e);
+                    showError(e.response.data.message);
                 });
         },
         loadUsers: function() {
@@ -155,7 +145,7 @@ export default {
                     );
                 })
                 .catch(e => {
-                    showError(e);
+                    showError(e.response.data.message);
                 });
         },
         loadArticle: function(article, mode = "save") {

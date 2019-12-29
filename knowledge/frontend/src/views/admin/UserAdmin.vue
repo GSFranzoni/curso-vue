@@ -132,16 +132,11 @@ export default {
             const id = this.user.id ? `/${this.user.id}` : "";
             axios[method](`${baseApiUrl}/users${id}`, this.user)
                 .then(response => {
-                    if(response.data.status === 200) {
-                        showSuccess(response.data.message)
-                        this.reset();
-                    }
-                    else {
-                        showError(response.data.message);
-                    }
+                    showSuccess(response.data.message)
+                    this.reset();
                 })
                 .catch(e => {
-                    showError(e);
+                    showError(e.response.data.message);
                 });
         },
         remove: function() {
@@ -149,16 +144,11 @@ export default {
             axios
                 .delete(`${baseApiUrl}/users/${id}`)
                 .then(response => {
-                    if(response.data.status === 200) {
-                        showSuccess(response.data.message)
-                        this.reset();
-                    }
-                    else {
-                        showError(response.data.message);
-                    }
+                    showSuccess(response.data.message)
+                    this.reset();
                 })
                 .catch(e => {
-                    showError(e);
+                    showError(e.response.data.message);
                 });
         },
         reset: function() {

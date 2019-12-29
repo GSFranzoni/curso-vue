@@ -28,7 +28,7 @@
 import PageTitle from "@/components/template/PageTitle";
 import Stat from "./Stat";
 import axios from "axios";
-import { baseApiUrl } from "@/global";
+import { baseApiUrl, showError } from "@/global";
 
 export default {
     name: "Home",
@@ -43,11 +43,10 @@ export default {
             axios.get(baseApiUrl + '/stats').then(
                 res => {
                     this.stats = res.data.data;
-                },
-                err => {
-                    alert(err);
                 }
-            )
+            ).catch(e=> {
+                showError(e.response.data.message);
+            })
         } 
     },
     mounted: function() {

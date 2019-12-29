@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { baseApiUrl } from '@/global';
+import { baseApiUrl, showError } from '@/global';
 import axios from 'axios';
 import PageTitle from '@/components/template/PageTitle';
 import ArticleItem from './ArticleItem';
@@ -43,7 +43,9 @@ export default {
                 response => {
                     this.category = response.data.data;
                 }
-            )
+            ).catch(e=> {
+                showError(e.response.data.message);
+            })
         },
         getArticles: function() {
             const url = `${baseApiUrl}/categories/${this.category.id}/articles?page=${this.page}`;
@@ -56,7 +58,9 @@ export default {
                         this.loadMore = false;
                     }
                 }
-            )
+            ).catch(e=> {
+                showError(e.response.data.message);
+            })
         }
     },
     mounted: function() {
