@@ -28,4 +28,5 @@ class ArticleController extends Controller
         } 
         return ($array);
     }
+
 }

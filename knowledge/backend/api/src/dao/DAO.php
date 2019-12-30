@@ -46,7 +46,7 @@ class DAO
             if (!isset($object[$column]) and $column != 'id') {
                 throw new Exception('O campo ' . $column . ' é requerido!');
                 return;
-            } else if ($object[$column] == '' and $column != 'id') {
+            } else if ($object[$column] === '' and $column != 'id') {
                 throw new Exception('O campo ' . $column . ' é inválido!');
                 return;
             }

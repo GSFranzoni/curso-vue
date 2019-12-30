@@ -11,10 +11,10 @@
             <b-form-input id="article-image" type="text" v-model="article.image"></b-form-input>
         </b-form-group>
         <b-form-group label-for="article-category" label="Categoria">
-            <b-form-select v-model="article.category" :options="categories"></b-form-select>
+            <b-form-select v-model.number="article.category" :options="categories"></b-form-select>
         </b-form-group>
         <b-form-group label-for="article-user" label="Autor">
-            <b-form-select v-model="article.user" :options="users"></b-form-select>
+            <b-form-select v-model.number="article.user" :options="users"></b-form-select>
         </b-form-group>
         <b-form-group label-for="article-content" label="Conteúdo">
             <VueEditor v-model='article.content' placeholder="Informe o conteúdo do artigo..."/>
@@ -54,7 +54,9 @@ export default {
     },
     data: function() {
         return {
-            article: {},
+            article: {
+                image: ""
+            },
             articles: [],
             mode: "save",
             page: 1,
@@ -100,7 +102,9 @@ export default {
                 });
         },
         reset: function() {
-            this.article = {};
+            this.article = {
+                image: ""
+            };
             this.categories = [];
             this.users = [];
             this.loadArticles();

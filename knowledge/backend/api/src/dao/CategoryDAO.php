@@ -55,7 +55,7 @@ class CategoryDAO extends DAO
     public static function insert($category)
     {
         foreach (static::$columns as $column) {
-            if(!isset($category[$column]) and $column!='id' and $column!='path' and $column!='parent') {
+            if(!isset($category[$column]) and $column!='id' and $column!='parent') {
                 throw new Exception('O campo '. $column. ' é requerido!');
                 return;
             }

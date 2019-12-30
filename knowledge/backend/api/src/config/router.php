@@ -103,7 +103,7 @@ $app->delete('/users/{id}', function (Request $request, Response $response, $arg
     }
     catch(Exception $ex) {
         $message = $ex->getMessage();
-        $status = $ex->getCode();
+        $status = 400;
     }
     $response->getBody()->write(json_encode(array('message' => $message, 'status' => $status)));
     return $response->withStatus($status);
@@ -119,7 +119,7 @@ $app->put('/users/{id}', function (Request $request, Response $response, $args) 
     catch(Exception $ex) {
         $data = [];
         $message = $ex->getMessage();
-        $status = $ex->getCode();
+        $status = 400;
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
     return $response->withStatus($status);
@@ -135,10 +135,10 @@ $app->post('/users', function (Request $request, Response $response, $args) {
     catch(Exception $ex) {
         $data = [];
         $message = $ex->getMessage();
-        $status = $ex->getCode();
+        $status = 500;
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
-    return $response->withStatus($status);
+    return $response->withStatus($status, $message);
 });
 
 $app->get('/categories', function (Request $request, Response $response, $args) {
@@ -150,7 +150,7 @@ $app->get('/categories', function (Request $request, Response $response, $args) 
     catch(Exception $e) {
         $data = [];
         $message = $e->getMessage();
-        $status = $e->getCode();
+        $status = 400;
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
     return $response->withStatus($status);
@@ -166,7 +166,7 @@ $app->get('/categories/tree', function (Request $request, Response $response, $a
     catch(Exception $e) {
         $data = [];
         $message = $e->getMessage();
-        $status = $e->getCode();
+        $status = 400;
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
     return $response->withStatus($status);
@@ -182,7 +182,7 @@ $app->get('/categories/{id}', function (Request $request, Response $response, $a
     catch(Exception $e) {
         $data = [];
         $message = $e->getMessage();
-        $status = $e->getCode();
+        $status = 400;
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
     return $response->withStatus($status);
@@ -198,7 +198,7 @@ $app->post('/categories', function (Request $request, Response $response, $args)
     catch(Exception $ex) {
         $data = [];
         $message = $ex->getMessage();
-        $status = $ex->getCode();
+        $status = 400;
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
     return $response->withStatus($status);
@@ -228,7 +228,7 @@ $app->put('/categories/{id}', function (Request $request, Response $response, $a
     catch(Exception $ex) {
         $data = [];
         $message = $ex->getMessage();
-        $status = $ex->getCode();
+        $status = 400;
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
     return $response->withStatus($status);
@@ -249,7 +249,7 @@ $app->get('/articles', function (Request $request, Response $response, $args) {
     catch(Exception $e) {
         $data = [];
         $message = $e->getMessage();
-        $status = $e->getCode();
+        $status = 400;
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
     return $response->withStatus($status);
@@ -264,7 +264,7 @@ $app->get('/articles/{id}', function (Request $request, Response $response, $arg
     catch(Exception $e) {
         $data = [];
         $message = $e->getMessage();
-        $status = $e->getCode();
+        $status = 400;
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
     return $response->withStatus($status);
@@ -278,7 +278,7 @@ $app->delete('/articles/{id}', function (Request $request, Response $response, $
     }
     catch(Exception $ex) {
         $message = $ex->getMessage();
-        $status = $ex->getCode();
+        $status = 400;
     }
     $response->getBody()->write(json_encode(array('message' => $message, 'status' => $status)));
     return $response->withStatus($status);
@@ -294,7 +294,7 @@ $app->post('/articles', function (Request $request, Response $response, $args) {
     catch(Exception $ex) {
         $data = [];
         $message = $ex->getMessage();
-        $status = $ex->getCode();
+        $status = 400;
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
     return $response->withStatus($status);
@@ -310,7 +310,7 @@ $app->put('/articles/{id}', function (Request $request, Response $response, $arg
     catch(Exception $ex) {
         $data = [];
         $message = $ex->getMessage();
-        $status = $ex->getCode();
+        $status = 400;
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
     return $response->withStatus($status);
@@ -325,7 +325,7 @@ $app->get('/categories/{category}/articles', function (Request $request, Respons
     catch(Exception $e) {
         $data = [];
         $message = $e->getMessage();
-        $status = $e->getCode();
+        $status = 400;
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
     return $response->withStatus($status);
@@ -340,7 +340,7 @@ $app->get('/stats', function (Request $request, Response $response, $args) {
     catch(Exception $e) {
         $data = [];
         $message = $e->getMessage();
-        $status = $e->getCode();
+        $status = 400;
     }
     $response->getBody()->write(json_encode(array('data' => $data, 'message' => $message, 'status' => $status)));
     return $response->withStatus($status);

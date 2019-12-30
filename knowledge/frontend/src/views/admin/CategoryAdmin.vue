@@ -5,7 +5,7 @@
             <b-form-input id="category-name" type="text" v-model="category.name"></b-form-input>
         </b-form-group>
         <b-form-group label-for="category-parent" label="Categoria pai">
-            <b-form-select v-model="category.parent" :options="options"></b-form-select>
+            <b-form-select v-model.number="category.parent" :options="options"></b-form-select>
         </b-form-group>
         <b-button @click="save" variant="primary" v-show="mode === 'save'">Salvar</b-button>
         <b-button @click="remove" variant="danger" v-show="mode === 'remove'">Excluir</b-button>
